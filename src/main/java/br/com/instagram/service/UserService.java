@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 
 public interface UserService {
 
-    Flux<UserDocument> getAllUser();
+    Flux<UserDTO> getAllUser();
 
     Mono<UserDTO> getOneUserById(Long id);
 

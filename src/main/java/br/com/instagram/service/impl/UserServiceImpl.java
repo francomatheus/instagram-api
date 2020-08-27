@@ -6,7 +6,10 @@ import br.com.instagram.model.form.UserForm;
 import br.com.instagram.repository.UserRepository;
 import br.com.instagram.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -17,15 +20,30 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public Flux<UserDocument> getAllUser() {
+    public Flux<UserDTO> getAllUser() {
 
-        return userRepository.findAll().switchIfEmpty(Flux.empty());
+        return getUserAndConverterToDTO();
+    }
+
+    private Flux<UserDTO> getUserAndConverterToDTO() {
+        return userRepository.findAll()
+                .map(userDocument -> {
+                    UserDTO userDTO = new UserDTO();
+                    userDTO.setId(userDocument.getId());
+                    userDTO.setCellphone(userDocument.getCellPhone());
+                    userDTO.setEmail(userDocument.getEmail());
+                    userDTO.setUsername(userDocument.getUsername());
+                    userDTO.setRoles(userDocument.getRoles());
+                    return userDTO;
+                })
+                .switchIfEmpty(Flux.empty());
     }
 
     @Override
     public Mono<UserDTO> getOneUserById(Long id) {
 
-        Mono<UserDocument> userDocumentMono = userRepository.findById(id);
+        Mono<UserDocument> userDocumentMono = userRepository.findById(id)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))));
 
         Mono<UserDTO> userDTOMono = converterUserEntityToUserDTO(userDocumentMono);
 
@@ -43,6 +61,7 @@ public class UserServiceImpl implements UserService {
 
 
         return userRepository.findById(id)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))))
                 .map(userDocument -> {
                     userDocument.setUsername(userForm.getUsername());
                     userDocument.setRoles(userForm.getRoles());
@@ -62,8 +81,8 @@ public class UserServiceImpl implements UserService {
     public Mono<Void> deleteUser(Long id) {
 
         return userRepository.findById(id)
-                .flatMap(userDocument -> userRepository.delete(userDocument))
-                .switchIfEmpty(Mono.empty());
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))))
+                .flatMap(userDocument -> userRepository.delete(userDocument));
 
     }
 
@@ -87,7 +106,7 @@ public class UserServiceImpl implements UserService {
         userDocument.setId(user.getId());
         userDocument.setCellPhone(user.getCellPhone());
         userDocument.setEmail(user.getEmail());
-        userDocument.setPassword(user.getPassword());
+        userDocument.setPassword(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(user.getPassword()));
         userDocument.setRoles(user.getRoles());
         userDocument.setUsername(user.getUsername());
 

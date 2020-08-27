@@ -33,7 +33,7 @@ public class UserResource {
 
     @GetMapping("/user")
     @Operation(summary = "List all users", tags = {"user"})
-    public Flux<UserDocument> getAllUsers(){
+    public Flux<UserDTO> getAllUsers(){
 
         return userService.getAllUser();
     }
