@@ -10,6 +10,10 @@ public interface PostRepository extends ReactiveMongoRepository<PostDocument, Lo
 
     Flux<PostDocument> findAllByUserId(Long userId, Pageable page);
 
+    Flux<PostDocument> findAllByUserId(Long userId);
+
     Mono<PostDocument> findByIdAndUserId(Long id, Long userId);
+
+
 
 }
