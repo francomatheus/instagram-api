@@ -1,5 +1,6 @@
 package br.com.instagram.model.entity;
 
+import br.com.instagram.model.ProfileUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,9 +24,11 @@ public class UserDocument implements UserDetails {
     @Indexed(unique = true)
     private String username;
     private String password;
+    private String name;
     @Indexed(unique = true)
     private String email;
     private String cellPhone;
+    private ProfileUser profile;
 
     private List<UserRoleDocument> roles;
 

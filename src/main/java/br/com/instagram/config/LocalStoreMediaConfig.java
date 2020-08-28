@@ -14,16 +14,26 @@ import java.nio.file.Path;
 @Component
 public class LocalStoreMediaConfig {
 
-    @Value("${directory.media.name}")
-    private String directoryName;
+    @Value("${directory.image-media.name}")
+    private String directoryImageName;
+    @Value("${directory.video-media.name}")
+    private String directoryVideoName;
+    @Value("${directory.profile-media.name}")
+    private String directoryProfileName;
 
     @Bean
     public void createDirectoryForMedia(){
 
         try {
-            Path path = FileSystems.getDefault().getPath(System.getenv("HOME"), "instagram-media");
-            Files.createDirectories(path);
-            log.info("Create directory about images");
+            Path imagePath = FileSystems.getDefault().getPath(System.getenv("HOME"), directoryImageName);
+            Files.createDirectories(imagePath);
+            Path videoPath = FileSystems.getDefault().getPath(System.getenv("HOME"), directoryVideoName);
+            Files.createDirectories(videoPath);
+            Path profileImagePath = FileSystems.getDefault().getPath(System.getenv("HOME"), directoryProfileName);
+            Files.createDirectories(profileImagePath);
+
+
+            log.info("Create directory about medias");
         }catch (IOException e ){
             e.printStackTrace();
             log.error("Problem to create directory: ", e);

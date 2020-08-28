@@ -7,11 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+public class FollowersDTO {
 
     private Long id;
-    private Long userId;
-    private Long dateOfComment;
-    private String comments;
+    private String nickname;
+    private String name;
 
 }

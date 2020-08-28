@@ -9,8 +9,9 @@ import java.util.List;
 public class UserForm {
 
     private Long id;
-    private String username;
+    private String nickname;
     private String password;
+    private String name;
     private String email;
     private String cellPhone;
 

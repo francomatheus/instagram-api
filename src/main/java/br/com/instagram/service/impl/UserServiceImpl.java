@@ -1,6 +1,7 @@
 package br.com.instagram.service.impl;
 
 import br.com.instagram.model.DTO.UserDTO;
+import br.com.instagram.model.ProfileUser;
 import br.com.instagram.model.entity.UserDocument;
 import br.com.instagram.model.form.UserForm;
 import br.com.instagram.repository.UserRepository;
@@ -42,12 +43,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public Mono<UserDTO> getOneUserById(Long id) {
 
-        Mono<UserDocument> userDocumentMono = userRepository.findById(id)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))));
+        return userRepository.findById(id)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))))
+                .map(userDocument -> {
+                        UserDTO userDTO = new UserDTO();
+                        userDTO.setId(userDocument.getId());
+                        userDTO.setCellphone(userDocument.getCellPhone());
+                        userDTO.setName(userDocument.getName());
+                        userDTO.setEmail(userDocument.getEmail());
+                        userDTO.setUsername(userDocument.getUsername());
+                        userDTO.setRoles(userDocument.getRoles());
 
-        Mono<UserDTO> userDTOMono = converterUserEntityToUserDTO(userDocumentMono);
+                        return userDTO;
+                });
 
-        return userDTOMono;
     }
 
     @Override
@@ -63,7 +72,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))))
                 .map(userDocument -> {
-                    userDocument.setUsername(userForm.getUsername());
+                    userDocument.setUsername(userForm.getNickname() );
                     userDocument.setRoles(userForm.getRoles());
                     userDocument.setPassword(userForm.getPassword());
                     userDocument.setEmail(userForm.getEmail());
@@ -86,7 +95,7 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private Mono<UserDTO> converterUserEntityToUserDTO(Mono<UserDocument> userEntityMono) {
+/*    private Mono<UserDTO> converterUserEntityToUserDTO(Mono<UserDocument> userEntityMono) {
 
 
         return userEntityMono.map(userEntity -> {
@@ -99,16 +108,23 @@ public class UserServiceImpl implements UserService {
             return userDTO;
         });
 
-    }
+    }*/
 
     private UserDocument converterUserFormToUserEntity(UserForm user) {
         UserDocument userDocument = new UserDocument();
+        ProfileUser profile = new ProfileUser();
+
         userDocument.setId(user.getId());
+        userDocument.setName(user.getName());
         userDocument.setCellPhone(user.getCellPhone());
         userDocument.setEmail(user.getEmail());
         userDocument.setPassword(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(user.getPassword()));
         userDocument.setRoles(user.getRoles());
-        userDocument.setUsername(user.getUsername());
+        userDocument.setUsername(user.getNickname());
+        profile.setUserId(user.getId());
+        profile.setNickname(user.getNickname());
+        profile.setName(user.getName());
+        userDocument.setProfile(profile);
 
         return userDocument;
     }

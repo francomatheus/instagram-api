@@ -10,6 +10,7 @@ public class UserDTO {
 
     private Long id;
     private String username;
+    private String name;
     private String email;
     private String cellphone;
     private List<UserRoleDocument> roles;

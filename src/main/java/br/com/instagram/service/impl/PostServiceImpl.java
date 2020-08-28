@@ -5,9 +5,9 @@ import br.com.instagram.model.entity.PostDocument;
 import br.com.instagram.model.form.PostForm;
 import br.com.instagram.repository.PostRepository;
 import br.com.instagram.service.PostService;
+import br.com.instagram.service.SaveMediaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.codec.multipart.FilePart;
@@ -16,10 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
@@ -28,10 +25,10 @@ import java.time.ZonedDateTime;
 public class PostServiceImpl implements PostService {
 
     @Autowired
-    private PostRepository postRepository;
+    private SaveMediaService saveMediaService;
 
-    @Value("${directory.media.name}")
-    private String directoryName;
+    @Autowired
+    private PostRepository postRepository;
 
     private final String nameCollection = "post";
 
@@ -55,7 +52,7 @@ public class PostServiceImpl implements PostService {
     public Mono<PostDTO> createNewPostImage(FilePart photo, PostForm postForm) throws IOException {
         log.info("Create a new image post!");
 
-        String pathImage = saveImage(photo, postForm.getUser_id());
+        String pathImage = saveMediaService.saveImage(photo, postForm.getUser_id());
         PostDocument postDocumentMono = converterFormToEntity(pathImage, postForm);
         Mono<PostDTO> mapPost = postRepository.save(postDocumentMono)
                 .map(postDocument -> {
@@ -76,7 +73,7 @@ public class PostServiceImpl implements PostService {
     public Mono<PostDTO> createNewPostVideo(FilePart video, PostForm postForm) throws IOException {
         log.info("Create a new video post!");
 
-        String pathImage = saveImage(video, postForm.getUser_id());
+        String pathImage = saveMediaService.saveVideo(video, postForm.getUser_id());
 
         PostDocument postDocumentMono = converterFormToEntity(pathImage, postForm);
         Mono<PostDTO> mapPost = postRepository.save(postDocumentMono)
@@ -149,31 +146,6 @@ public class PostServiceImpl implements PostService {
                     return postDTO;
                 });
         return mapPost;
-    }
-
-    private String saveImage(FilePart media, Long userId) throws IOException {
-        log.info("Save Image in directory!");
-
-        try {
-
-            Path path = FileSystems.getDefault().getPath(System.getenv("HOME"), directoryName);
-
-            int i = (int) (1+Math.random() * 100000);
-
-            String fileName = path.toString().concat("/")
-                    .concat(userId.toString())
-                    .concat("@")
-                    .concat(Integer.toString(i))
-                    .concat("-")
-                    .concat("instagram-images");
-
-            File f = new File(fileName);;
-            media.transferTo(f);
-            log.info("Image saved!");
-            return f.getAbsolutePath();
-        }finally {
-            log.info("Finish to try save media!");
-        }
     }
 
     private PostDocument converterFormToEntity(String pathImage, PostForm postForm) {
