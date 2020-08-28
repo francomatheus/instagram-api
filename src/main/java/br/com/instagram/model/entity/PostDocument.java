@@ -23,10 +23,10 @@ public class PostDocument {
     private Long id;
     @NotNull
     private String pathMedia;
-    private LinkedHashSet<UserLikeForm> likeUserName = new LinkedHashSet<>();
     private Long userId;
     private String legend;
-    private List<Comment> comments = new ArrayList<>();
     private Long datePosting;
+    private LinkedHashSet<Comment> comments = new LinkedHashSet<>();
+    private LinkedHashSet<UserLikeForm> likeUserName = new LinkedHashSet<>();
 
 }
