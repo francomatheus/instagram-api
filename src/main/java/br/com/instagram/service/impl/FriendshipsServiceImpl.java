@@ -45,8 +45,7 @@ public class FriendshipsServiceImpl implements FriendshipsService {
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!")))
                 .map(userDocument -> {
                     return userDocument.getProfile().getFollowers();
-                })
-                ;
+                });
     }
 
     @Override
