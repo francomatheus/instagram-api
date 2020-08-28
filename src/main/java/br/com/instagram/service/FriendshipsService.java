@@ -1,18 +1,20 @@
 package br.com.instagram.service;
 
 import br.com.instagram.model.FollowersDTO;
+import br.com.instagram.model.entity.UserDocument;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 
 public interface FriendshipsService {
 
-    Mono<Object> followUser(Long userId, Long userFollowId);
+    Flux<UserDocument> followUser(Long userId, Long userFollowId);
 
-    Mono<Object> unfollowUser(Long userId, Long userFollowId);
+    Flux<UserDocument> unfollowUser(Long userId, Long userFollowId);
 
-    Mono<List<FollowersDTO>> getFollowers(Long userId);
+    Mono<LinkedHashSet<FollowersDTO>> getFollowers(Long userId);
 
-    Mono<List<FollowersDTO>> getFollowing(Long userId);
+    Mono<LinkedHashSet<FollowersDTO>> getFollowing(Long userId);
 
 }

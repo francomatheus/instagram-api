@@ -1,15 +1,17 @@
 package br.com.instagram.resource;
 
 import br.com.instagram.model.FollowersDTO;
+import br.com.instagram.model.entity.UserDocument;
 import br.com.instagram.service.FriendshipsService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.util.LinkedHashSet;
 
 @Slf4j
 @RestController
@@ -21,7 +23,7 @@ public class FriendshipsResource {
 
     @GetMapping("/follower/{userId}")
     @Operation(summary = "Get people follow user", tags = {"friendship"})
-    public Mono<ResponseEntity<List<FollowersDTO>>> getAllFollowers(@PathVariable Long userId){
+    public Mono<ResponseEntity<LinkedHashSet<FollowersDTO>>> getAllFollowers(@PathVariable Long userId){
         return friendshipsService.getFollowers(userId)
                 .map(followersDTO -> ResponseEntity.ok(followersDTO))
                 .switchIfEmpty(Mono.empty());
@@ -30,23 +32,25 @@ public class FriendshipsResource {
 
     @GetMapping("/following/{userId}")
     @Operation(summary = "Get people of user follow", tags = {"friendship"})
-    public Mono<ResponseEntity<List<FollowersDTO>>> getAllFollowing(@PathVariable Long userId){
+    public Mono<ResponseEntity<LinkedHashSet<FollowersDTO>>> getAllFollowing(@PathVariable Long userId){
         return friendshipsService.getFollowing(userId)
-                .map(followersDTO -> ResponseEntity.ok(followersDTO));
+                .map(followersDTO -> ResponseEntity.ok(followersDTO))
+                .switchIfEmpty(Mono.empty());
     }
 
-    @PostMapping("/follow/{userId}/{userFollowId}")
+    @PostMapping("/{userId}/follow-to/{userFollowId}")
     @Operation(summary = "Follow person", tags = {"friendship"})
-    public Mono<ResponseEntity<String>> followUser(@PathVariable Long userId, @PathVariable Long userFollowId){
-        return friendshipsService.followUser(userId, userFollowId)
-                .map(o -> ResponseEntity.ok("Following!!"));
+    public Flux<UserDocument> followUser(@PathVariable Long userId, @PathVariable Long userFollowId){
+         return friendshipsService.followUser(userId, userFollowId);
+                 //.map(s -> ResponseEntity.ok(s));
+
     }
 
-    @DeleteMapping("/unfollow/{userId}/{userFollowId}")
+    @DeleteMapping("/{userId}/unfollow-to/{userFollowId}")
     @Operation(summary = "Unfollow person", tags = {"friendship"})
-    public Mono<ResponseEntity<String>> unfollowUser(@PathVariable Long userId, @PathVariable Long userFollowId){
-        return friendshipsService.followUser(userId, userFollowId)
-                .map(o -> ResponseEntity.ok("UnFollow!!"));
+    public Flux<UserDocument> unfollowUser(@PathVariable Long userId, @PathVariable Long userFollowId){
+        return friendshipsService.unfollowUser(userId, userFollowId);
+                //.map(s -> ResponseEntity.ok(s));
     }
 
 
