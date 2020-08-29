@@ -3,16 +3,19 @@ package br.com.instagram.service.impl;
 import br.com.instagram.service.SaveMediaService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
 
 @Slf4j
+@Primary
 @Service
-public class SaveMediaServiceImpl implements SaveMediaService {
+public class SaveMediaLocalServiceImpl implements SaveMediaService {
 
     @Value("${directory.image-media.name}")
     private String directoryImageName;

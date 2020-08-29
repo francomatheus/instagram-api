@@ -26,7 +26,7 @@ public class JwtTokenService {
     @Value("${instagram-secretjwt.value}")
     private String secretKey;
 
-    private Long timeExpiration = 24*60*60L;
+    private Long timeExpiration = 24*60*60L*1000;
 
 
     public String generateToken(Mono<Authentication> authentication, String name){

@@ -30,8 +30,6 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
 
-    private final String nameCollection = "post";
-
     @Override
     public Flux<PostDTO> getAllPostByUserWithPagination(Long userId, int page, int size) {
         log.info("Get all post about one User!");
