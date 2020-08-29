@@ -10,4 +10,6 @@ public  interface SaveMediaService {
 
     String saveProfileImage(FilePart media, Long userId);
 
+    void deleteMedia(String path);
+
 }

@@ -110,6 +110,10 @@ public class PostServiceImpl implements PostService {
 
         return postRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))))
+                .map(postDocument -> {
+                    saveMediaService.deleteMedia(postDocument.getPathMedia());
+                    return postDocument;
+                })
                 .flatMap(postDocument -> postRepository.delete(postDocument));
     }
 

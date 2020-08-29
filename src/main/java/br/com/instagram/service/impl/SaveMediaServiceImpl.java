@@ -42,6 +42,9 @@ public class SaveMediaServiceImpl implements SaveMediaService {
             media.transferTo(f);
             log.info("Image saved!");
             return f.getAbsolutePath();
+        }catch (Exception e){
+            log.info("Error to save media!");
+            throw new RuntimeException("Error to save Image: ", e);
         }finally {
             log.info("Finish to try save media!");
         }
@@ -56,7 +59,7 @@ public class SaveMediaServiceImpl implements SaveMediaService {
 
             Path path = FileSystems.getDefault().getPath(System.getenv("HOME"), directoryVideoName);
 
-            int i = (int) (1+Math.random() * 100000);
+            int i = (int) (1 + Math.random() * 100000);
 
             String fileName = path.toString().concat("/")
                     .concat(userId.toString())
@@ -65,10 +68,14 @@ public class SaveMediaServiceImpl implements SaveMediaService {
                     .concat("-")
                     .concat("instagram-images");
 
-            File f = new File(fileName);;
+            File f = new File(fileName);
+            ;
             media.transferTo(f);
             log.info("Video saved!");
             return f.getAbsolutePath();
+        }catch (Exception e){
+            log.info("Error to save media!");
+            throw new RuntimeException("Error to save Video: ", e);
         }finally {
             log.info("Finish to try save media!");
         }
@@ -88,13 +95,28 @@ public class SaveMediaServiceImpl implements SaveMediaService {
                     .concat("@")
                     .concat("profile-instagram");
 
-            File f = new File(fileName);;
+            File f = new File(fileName);
+            ;
             media.transferTo(f);
             log.info("Profile Image saved!");
             return f.getAbsolutePath();
+        }catch (Exception e){
+            throw new RuntimeException("Error to save image Profile: ", e);
         }finally {
-            log.info("Finish to try save media!");
+            log.info("Finish to try save profile image!");
         }
 
     }
+
+    @Override
+    public void deleteMedia(String path) {
+
+        File file = new File(path);
+        file.delete();
+
+        log.info("Media deleted!!");
+
+    }
+
+
 }

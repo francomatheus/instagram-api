@@ -1,10 +1,10 @@
 package br.com.instagram.security;
 
-import br.com.instagram.model.entity.UserDocument;
 import br.com.instagram.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -18,10 +18,15 @@ public class UserDetailsService implements ReactiveUserDetailsService {
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
-        log.debug("Verify username!!");
-        Mono<UserDocument> userDocumentMono = userRepository.findByUsername(username)
-                .switchIfEmpty(Mono.error(new UsernameNotFoundException("User not found!!")));
+        log.info("Verify username!!");
+        return userRepository.findUserDocumentByUsername(username)
+                .switchIfEmpty(Mono.error(new UsernameNotFoundException("User not found!!")))
+                .map(userDocument -> {
+                    log.info("Passei aqui na verificação");
+                    return new User(userDocument.getUsername()
+                            , userDocument.getPassword()
+                            , userDocument.getAuthorities());
+                }).cast(UserDetails.class);
 
-        return userDocumentMono.cast(UserDetails.class);
     }
 }

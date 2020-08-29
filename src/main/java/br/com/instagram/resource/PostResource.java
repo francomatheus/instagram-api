@@ -69,9 +69,12 @@ public class PostResource {
     @PostMapping("/video")
     @Operation(summary = "Create a video post", tags = {"post"})
     public Mono<ResponseEntity<Mono<PostDTO>>> createNewPostVideo(@RequestParam FilePart video,
-                                                                  @RequestBody(required = false) PostForm post){
+                                                                  @RequestPart String id,
+                                                                  @RequestPart(required = false) String userId,
+                                                                  @RequestPart(required = false) String legend){
         try {
-            Mono<PostDTO> newPostVideo = postService.createNewPostVideo(video, post);
+            Mono<PostDTO> newPostVideo = postService.createNewPostVideo(video,
+                    new PostForm(Long.parseLong(id),Long.parseLong(userId),legend));
 
             return Mono.just(ResponseEntity.created(new URI("/v0/post/".concat(newPostVideo.map(PostDTO::getId).toString())))
                     .body(newPostVideo))

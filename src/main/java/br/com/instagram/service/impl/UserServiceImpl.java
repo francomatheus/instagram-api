@@ -8,7 +8,7 @@ import br.com.instagram.repository.UserRepository;
 import br.com.instagram.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
@@ -95,21 +95,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-/*    private Mono<UserDTO> converterUserEntityToUserDTO(Mono<UserDocument> userEntityMono) {
-
-
-        return userEntityMono.map(userEntity -> {
-            UserDTO userDTO = new UserDTO();
-            userDTO.setCellphone(userEntity.getCellPhone());
-            userDTO.setEmail(userEntity.getEmail());
-            userDTO.setUsername(userEntity.getUsername());
-            userDTO.setRoles(userEntity.getRoles());
-
-            return userDTO;
-        });
-
-    }*/
-
     private UserDocument converterUserFormToUserEntity(UserForm user) {
         UserDocument userDocument = new UserDocument();
         ProfileUser profile = new ProfileUser();
@@ -118,7 +103,7 @@ public class UserServiceImpl implements UserService {
         userDocument.setName(user.getName());
         userDocument.setCellPhone(user.getCellPhone());
         userDocument.setEmail(user.getEmail());
-        userDocument.setPassword(PasswordEncoderFactories.createDelegatingPasswordEncoder().encode(user.getPassword()));
+        userDocument.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userDocument.setRoles(user.getRoles());
         userDocument.setUsername(user.getNickname());
         profile.setUserId(user.getId());

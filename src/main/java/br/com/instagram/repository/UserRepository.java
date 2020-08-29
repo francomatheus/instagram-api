@@ -8,5 +8,6 @@ public interface UserRepository extends ReactiveMongoRepository<UserDocument, Lo
 
     Mono<UserDocument> findByEmail(String email);
     Mono<UserDocument> findByUsername(String username);
+    Mono<UserDocument> findByUsername(Mono<String> username);
     Mono<UserDocument> findUserDocumentByUsername(String username);
 }
