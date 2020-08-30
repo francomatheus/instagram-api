@@ -21,7 +21,7 @@ Para subir a aplicação com o docker, rode o seguinte comando:
 ```
 $ sudo docker-compose up  
 ```
-<a href="https://insta-api-collection.s3.us-east-1.amazonaws.com/Instagram-API.postman_collection.json?response-content-disposition=attachment&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEE8aCXNhLWVhc3QtMSJIMEYCIQDppnjRpJbTj%2FdKSwKvFKTOiRGz3gaQeO4%2BXecuX23tygIhAL60HhHVr99oYJVK0MZIpyVG5IotCXjIJWR2BEMYW7RJKsQCCEgQABoMNDI1NDY5MzkzNjEzIgyvBgisZ7Ualo18Z5AqoQJPQO9MTIS2ehGQy7LfW2%2B0u0sEwoNTxodeBaeHSkDWyZwTB6iZ2I17mO0wvqnbsuB%2FzllJW%2F1iTkkvnb8GheDWkOQ2SA1D%2Ftudhi2TqLl3wRwWc8BS98aJ4o6eIcKaWTtAzlu1a%2Fjyv8r0c09DS34fsko%2BPn9XqilcKk9XqlVOBRs69mBG0FZ5kx6C%2Bl3YiM6Ct%2BWjrDvLgV%2BGGRaR2K0unQG%2FvB1U5V5AGbkQi6S%2B2%2FKBqT1J350KVlnVS53XNTmtSjlagPfBwCM9Z8w9yjIFcbBytLiXs%2FCk%2BmYZsE7GF7%2B7jKq2xH1y6qg5uv6qM7OWSxPkQ1xBLdyNddHgyllFwDgaRN1iocpBUb%2BNJx4F63WKoXtNcZPMggvEF%2F9%2B6U2EMPT%2BrvoFOq8C8%2FxyXQ1lPSGmpu7I%2BqmmZS%2Bims9XuC3%2By7LRkgkN9T4CRpuwRnvaqR6f5SMt744Rmj4FIlwqekdzdcX6NCuBaABR6tdO8H6pCQq102gqsqoZ%2FVBA1edYYqmSRE9z8fBcFu99bEquvDJSizRVg7UjBsFwvo0tp%2FvDsFXjQH7cO3jSX38QdjE%2BN7TAUg2g%2BB8Oupihr5emZZMuXPkaaeW%2Fn1xEXfrTXuRmoTHP6yYNCZB3zKDx3lmUZuHTgPq2xMUK3Nx0U%2Fb2VYTHErw2ytBJrMjUKdycLZvRatvXA8YX1hgybv5sFZSFq7H%2FzRiPKqdUihHXyTWhYvFuX5Pft6JUui4FtBjDOsJ0tLLnlFXwyZVgnEEkO6tFXM28TFuUJBRMoOKdDBX939BpiUgAcOyw&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20200830T202527Z&X-Amz-SignedHeaders=host&X-Amz-Expires=300&X-Amz-Credential=ASIAWGD7TXLGSVEGOWXX%2F20200830%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=a9e4bfe01192f999678611a78a4c4159a19cce41d09488b54a3bab5f28059bbc"> Collection para Postman da API</a>
+<a href="https://github.com/francomatheus/collection-instagram-api"> Collection para Postman da API</a>
 
 ### Configuração: 
 
