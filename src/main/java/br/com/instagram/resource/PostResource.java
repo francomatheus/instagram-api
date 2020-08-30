@@ -18,9 +18,9 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+@Slf4j
 @RestController
 @RequestMapping("/v0/post")
-@Slf4j
 public class PostResource {
 
     @Autowired

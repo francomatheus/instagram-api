@@ -91,7 +91,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Mono<PostDocument> updatePost(Long id, Long userId, PostForm newPost) {
-
+        log.info("Update post!");
         return postRepository.findByIdAndUserId(id, userId)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))))
                 .map(postDocument -> {
@@ -105,7 +105,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Mono<Void> deletePost(Long id) {
-
+        log.info("Delete post!");
         return postRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))))
                 .map(postDocument -> {
@@ -116,6 +116,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private Flux<PostDTO> getAllPostAndConverToDTO(Long userId, int page, int size) {
+        log.info("Get all post from database and converter to PostDTO!");
         Flux<PostDTO> map = postRepository.findAllByUserId(userId, PageRequest.of(page, size))
                 .map(postDocument -> {
                     PostDTO postDTO = new PostDTO();
@@ -134,6 +135,7 @@ public class PostServiceImpl implements PostService {
     }
 
     private Mono<PostDTO> getOnePostAndConverterToDTO(Long id, Long userId) {
+        log.info("Get One post from database and converter to postDTO!");
         Mono<PostDTO> mapPost = postRepository.findByIdAndUserId(id, userId)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))))
                 .map(postDocument -> {

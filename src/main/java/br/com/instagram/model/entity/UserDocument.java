@@ -1,6 +1,6 @@
 package br.com.instagram.model.entity;
 
-import br.com.instagram.model.ProfileUser;
+import br.com.instagram.model.domain.ProfileUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

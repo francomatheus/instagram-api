@@ -1,6 +1,6 @@
 package br.com.instagram.service;
 
-import br.com.instagram.model.ProfileUser;
+import br.com.instagram.model.domain.ProfileUser;
 import br.com.instagram.model.form.ProfileUserForm;
 import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Mono;

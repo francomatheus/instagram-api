@@ -22,7 +22,6 @@ public class UserDetailsService implements ReactiveUserDetailsService {
         return userRepository.findUserDocumentByUsername(username)
                 .switchIfEmpty(Mono.error(new UsernameNotFoundException("User not found!!")))
                 .map(userDocument -> {
-                    log.info("Passei aqui na verificação");
                     return new User(userDocument.getUsername()
                             , userDocument.getPassword()
                             , userDocument.getAuthorities());

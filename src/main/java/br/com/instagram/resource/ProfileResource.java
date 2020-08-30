@@ -1,7 +1,7 @@
 package br.com.instagram.resource;
 
 
-import br.com.instagram.model.ProfileUser;
+import br.com.instagram.model.domain.ProfileUser;
 import br.com.instagram.model.form.ProfileUserForm;
 import br.com.instagram.service.ProfileUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,7 +42,7 @@ public class ProfileResource {
     @Operation(summary = "Update values about user profile", tags = {"profile"})
     public Mono<ResponseEntity<ProfileUser>> updateProfile(@PathVariable Long userId, @RequestBody ProfileUserForm profileForm ){
         return profileUserService.updateProfile(userId,profileForm)
-                .map(profileUser -> ResponseEntity.ok(profileUser));
+                .map(profileUser -> ResponseEntity.accepted().body(profileUser));
     }
 
     @PostMapping(value = "/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

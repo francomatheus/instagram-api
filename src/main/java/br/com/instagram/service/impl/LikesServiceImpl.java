@@ -5,6 +5,7 @@ import br.com.instagram.model.entity.PostDocument;
 import br.com.instagram.model.form.UserLikeForm;
 import br.com.instagram.repository.PostRepository;
 import br.com.instagram.service.LikesService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class LikesServiceImpl implements LikesService {
 
@@ -22,6 +24,7 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public Mono<List<UserLikeDTO>> getAllLikeOfPost(Long postId) {
+        log.info("Get all person who like the post!");
         return postRepository.findById(postId)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!")))
                 .map(postDocument -> {
@@ -42,15 +45,18 @@ public class LikesServiceImpl implements LikesService {
 
     @Override
     public Mono<PostDocument> likePost(Long postId, UserLikeForm userLikeForm) {
+        log.info("Like post!");
         return addLikeOnPost(postId, userLikeForm);
     }
 
     @Override
     public Mono<PostDocument> unLikePost(Long postId, UserLikeForm userLikeForm) {
+        log.info("unlike post!");
         return removeLikeOnPost(postId, userLikeForm);
     }
 
     private Mono<PostDocument> addLikeOnPost(Long postId, UserLikeForm userLikeForm) {
+        log.info("Add like on post!");
         return postRepository.findById(postId)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!")))
                 .map(postDocument -> {
@@ -61,6 +67,7 @@ public class LikesServiceImpl implements LikesService {
     }
 
     private Mono<PostDocument> removeLikeOnPost(Long postId, UserLikeForm userLikeForm) {
+        log.info("Remove like on post!");
         return postRepository.findById(postId)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found!")))
                 .map(postDocument -> {

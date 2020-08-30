@@ -1,6 +1,6 @@
 package br.com.instagram.service;
 
-import br.com.instagram.model.FollowersDTO;
+import br.com.instagram.model.DTO.FollowersDTO;
 import br.com.instagram.model.entity.UserDocument;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

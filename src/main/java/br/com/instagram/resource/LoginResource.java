@@ -4,6 +4,7 @@ import br.com.instagram.model.DTO.TokenDTO;
 import br.com.instagram.model.request.UserRequest;
 import br.com.instagram.security.jwt.JwtTokenService;
 import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RestController
 @RequestMapping("/v0/auth/login")
 public class LoginResource {

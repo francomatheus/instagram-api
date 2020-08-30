@@ -1,6 +1,6 @@
 package br.com.instagram.resource;
 
-import br.com.instagram.model.FollowersDTO;
+import br.com.instagram.model.DTO.FollowersDTO;
 import br.com.instagram.model.entity.UserDocument;
 import br.com.instagram.service.FriendshipsService;
 import io.swagger.v3.oas.annotations.Operation;

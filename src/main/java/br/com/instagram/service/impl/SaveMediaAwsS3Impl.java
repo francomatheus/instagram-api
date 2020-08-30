@@ -39,7 +39,7 @@ public class SaveMediaAwsS3Impl implements SaveMediaService {
 
     @Override
     public String saveImage(FilePart media, Long userId) {
-
+        log.info("Save image on bucket aws!");
         int i = (int) (1+Math.random() * 100000);
 
         String fileName = userId.toString()
@@ -74,6 +74,7 @@ public class SaveMediaAwsS3Impl implements SaveMediaService {
 
     @Override
     public String saveVideo(FilePart media, Long userId) {
+        log.info("Save Video on bucket aws");
         int i = (int) (1+Math.random() * 100000);
 
         String fileName = userId.toString()
@@ -109,7 +110,7 @@ public class SaveMediaAwsS3Impl implements SaveMediaService {
 
     @Override
     public String saveProfileImage(FilePart media, Long userId) {
-
+        log.info("Save a profile image on bucket aws");
         String fileName = userId.toString()
                 .concat("@")
                 .concat("profile-instagram");
@@ -141,19 +142,22 @@ public class SaveMediaAwsS3Impl implements SaveMediaService {
 
     @Override
     public void deleteMedia(String path) {
-
+        log.info("Delete media from bucket aws");
         String[] split = path.split("/");
 
         String namePathMedia = split[4];
 
         if (path.contains("profile-instagram")){
             amazonS3.deleteObject(bucketProfile, namePathMedia);
+            log.info("Profile Image deleted!");
         }
         else if (path.contains("instagram-video")){
             amazonS3.deleteObject(bucketVideo, namePathMedia);
+            log.info("Video deleted!");
         }
         else if (path.contains("instagram-images")){
             amazonS3.deleteObject(bucketImage, namePathMedia);
+            log.info("Image deleted!");
         }
     }
 }

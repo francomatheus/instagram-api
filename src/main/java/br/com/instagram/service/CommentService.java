@@ -1,6 +1,6 @@
 package br.com.instagram.service;
 
-import br.com.instagram.model.Comment;
+import br.com.instagram.model.domain.Comment;
 import br.com.instagram.model.entity.PostDocument;
 import br.com.instagram.model.form.CommentForm;
 import br.com.instagram.model.form.CommentUpdateForm;

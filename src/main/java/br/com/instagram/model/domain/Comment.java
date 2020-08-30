@@ -1,4 +1,4 @@
-package br.com.instagram.model;
+package br.com.instagram.model.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

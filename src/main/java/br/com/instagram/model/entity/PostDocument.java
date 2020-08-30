@@ -1,6 +1,6 @@
 package br.com.instagram.model.entity;
 
-import br.com.instagram.model.Comment;
+import br.com.instagram.model.domain.Comment;
 import br.com.instagram.model.form.UserLikeForm;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,9 +9,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 
 @Data
 @NoArgsConstructor

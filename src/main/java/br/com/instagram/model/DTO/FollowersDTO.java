@@ -1,4 +1,4 @@
-package br.com.instagram.model;
+package br.com.instagram.model.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
