@@ -1,0 +1,34 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    command: mongod --noauth
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: instagram
+    networks:
+      - backend
+
+  insta-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: instagram-api
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongodb:27017/instagram
+      - SPRING_DATA_MONGODB_DATABASE=instagram
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongodb
+    networks:
+      - backend
+    links:
+      - mongodb
+
+networks:
+  backend:
+    driver: bridge

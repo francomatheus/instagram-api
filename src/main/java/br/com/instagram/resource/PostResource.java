@@ -48,7 +48,7 @@ public class PostResource {
     @Operation(summary = "Create a image post", tags = {"post"})
     public Mono<ResponseEntity<Mono<PostDTO>>> createNewPostImage(@RequestPart("file") FilePart photo,
                                                                   @RequestPart String id,
-                                                                  @RequestPart(required = false) String userId,
+                                                                  @RequestPart(required = true) String userId,
                                                                   @RequestPart(required = false) String legend){
 
         try {
@@ -68,9 +68,9 @@ public class PostResource {
 
     @PostMapping("/video")
     @Operation(summary = "Create a video post", tags = {"post"})
-    public Mono<ResponseEntity<Mono<PostDTO>>> createNewPostVideo(@RequestParam FilePart video,
+    public Mono<ResponseEntity<Mono<PostDTO>>> createNewPostVideo(@RequestPart("file") FilePart video,
                                                                   @RequestPart String id,
-                                                                  @RequestPart(required = false) String userId,
+                                                                  @RequestPart(required = true) String userId,
                                                                   @RequestPart(required = false) String legend){
         try {
             Mono<PostDTO> newPostVideo = postService.createNewPostVideo(video,
@@ -79,7 +79,6 @@ public class PostResource {
             return Mono.just(ResponseEntity.created(new URI("/v0/post/".concat(newPostVideo.map(PostDTO::getId).toString())))
                     .body(newPostVideo))
                     .onErrorReturn(ResponseEntity.notFound().build());
-
 
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();

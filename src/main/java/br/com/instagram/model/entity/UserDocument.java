@@ -1,6 +1,8 @@
 package br.com.instagram.model.entity;
 
 import br.com.instagram.model.domain.ProfileUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,11 +27,9 @@ public class UserDocument implements UserDetails {
     private String username;
     private String password;
     private String name;
-    @Indexed(unique = true)
     private String email;
     private String cellPhone;
     private ProfileUser profile;
-
     private List<UserRoleDocument> roles;
 
     @Override

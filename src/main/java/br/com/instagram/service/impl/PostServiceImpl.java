@@ -4,6 +4,7 @@ import br.com.instagram.model.DTO.PostDTO;
 import br.com.instagram.model.entity.PostDocument;
 import br.com.instagram.model.form.PostForm;
 import br.com.instagram.repository.PostRepository;
+import br.com.instagram.repository.UserRepository;
 import br.com.instagram.service.PostService;
 import br.com.instagram.service.SaveMediaService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,9 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public Flux<PostDTO> getAllPostByUserWithPagination(Long userId, int page, int size) {
         log.info("Get all post about one User!");
@@ -48,45 +52,59 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Mono<PostDTO> createNewPostImage(FilePart photo, PostForm postForm) throws IOException {
-        log.info("Create a new image post!");
+        log.info("Start create a new image post!");
 
-        String pathImage = saveMediaService.saveImage(photo, postForm.getUser_id());
-        PostDocument postDocumentMono = converterFormToEntity(pathImage, postForm);
-        Mono<PostDTO> mapPost = postRepository.save(postDocumentMono)
-                .map(postDocument -> {
-                    PostDTO postDTO = new PostDTO();
-                    postDTO.setDatePosting(postDocument.getDatePosting());
-                    postDTO.setId(postDocument.getId());
-                    postDTO.setLegend(postDocument.getLegend());
-                    postDTO.setPathMedia(postDocument.getPathMedia());
-                    postDTO.setUserId(postDocument.getUserId());
+        return userRepository.findById(postForm.getUser_id())
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"User not found!!")))
+                .map(userDocument -> {
 
-                    return postDTO;
+                    String pathImage = saveMediaService.saveImage(photo, postForm.getUser_id());
+                    PostDocument postDocumentMono = converterFormToEntity(pathImage, postForm);
+                    return postRepository.save(postDocumentMono)
+                            .map(postDocument -> {
+                                PostDTO postDTO = new PostDTO();
+                                postDTO.setDatePosting(postDocument.getDatePosting());
+                                postDTO.setId(postDocument.getId());
+                                postDTO.setLegend(postDocument.getLegend());
+                                postDTO.setPathMedia(postDocument.getPathMedia());
+                                postDTO.setUserId(postDocument.getUserId());
+
+                                return postDTO;
+                            });
+
+                }).flatMap(postDTOMono -> {
+                    return Mono.first(postDTOMono);
                 });
 
-        return mapPost;
     }
 
     @Override
     public Mono<PostDTO> createNewPostVideo(FilePart video, PostForm postForm) throws IOException {
-        log.info("Create a new video post!");
+        log.info("Start create a new video post!");
 
-        String pathImage = saveMediaService.saveVideo(video, postForm.getUser_id());
+        return userRepository.findById(postForm.getUser_id())
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"User not found!!")))
+                .map(userDocument -> {
 
-        PostDocument postDocumentMono = converterFormToEntity(pathImage, postForm);
-        Mono<PostDTO> mapPost = postRepository.save(postDocumentMono)
-                .map(postDocument -> {
-                    PostDTO postDTO = new PostDTO();
-                    postDTO.setDatePosting(postDocument.getDatePosting());
-                    postDTO.setId(postDocument.getId());
-                    postDTO.setLegend(postDocument.getLegend());
-                    postDTO.setPathMedia(postDocument.getPathMedia());
-                    postDTO.setUserId(postDocument.getUserId());
+                    String pathImage = saveMediaService.saveVideo(video, postForm.getUser_id());
 
-                    return postDTO;
+                    PostDocument postDocumentMono = converterFormToEntity(pathImage, postForm);
+                    return postRepository.save(postDocumentMono)
+                            .map(postDocument -> {
+                                PostDTO postDTO = new PostDTO();
+                                postDTO.setDatePosting(postDocument.getDatePosting());
+                                postDTO.setId(postDocument.getId());
+                                postDTO.setLegend(postDocument.getLegend());
+                                postDTO.setPathMedia(postDocument.getPathMedia());
+                                postDTO.setUserId(postDocument.getUserId());
+
+                                return postDTO;
+                            });
+
+
+                }).flatMap(postDTOMono -> {
+                    return Mono.first(postDTOMono);
                 });
-
-        return mapPost;
     }
 
     @Override
@@ -96,6 +114,8 @@ public class PostServiceImpl implements PostService {
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST,"Error to find post with id: ".concat(id.toString()))))
                 .map(postDocument -> {
                     postDocument.setLegend(newPost.getLegend());
+                    postDocument.setComments(postDocument.getComments());
+                    postDocument.setLikeUserName(postDocument.getLikeUserName());
                     return postDocument;
                 })
                 .flatMap(postDocument -> postRepository.save(postDocument))

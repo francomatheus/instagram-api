@@ -12,11 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,15 +26,14 @@ public class JwtTokenService {
     private Long timeExpiration = 24*60*60L*1000;
 
 
-    public String generateToken(Mono<Authentication> authentication, String name){
+    public String generateToken(Authentication authentication){
 
         Date dateNow = new Date();
         Date dateExpiration = new Date(dateNow.getTime() + timeExpiration);
 
         return Jwts.builder()
                 .setIssuer("Instagram-api")
-                .setSubject(name)
-          //      .setClaims(claims)
+                .setSubject(authentication.getName())
                 .setIssuedAt(dateNow)
                 .setExpiration(dateExpiration)
                 .signWith(SignatureAlgorithm.HS256, secretKey)
@@ -59,9 +55,8 @@ public class JwtTokenService {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());*/
 
-        List<SimpleGrantedAuthority> admin = Arrays.asList("ADMIN").stream()
+        List<SimpleGrantedAuthority> admin = Arrays.asList("USER").stream()
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-
 
         User principal = new User(claims.getSubject(), "", admin);
 
@@ -79,4 +74,5 @@ public class JwtTokenService {
         }
         return false;
     }
+
 }

@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserService {
                     userDTO.setEmail(userDocument.getEmail());
                     userDTO.setUsername(userDocument.getUsername());
                     userDTO.setRoles(userDocument.getRoles());
+                    userDTO.setName(userDocument.getName());
                     return userDTO;
                 })
                 .switchIfEmpty(Flux.empty());

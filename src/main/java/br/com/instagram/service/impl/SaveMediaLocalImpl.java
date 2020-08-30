@@ -15,7 +15,7 @@ import java.nio.file.Path;
 @Slf4j
 @Primary
 @Service
-public class SaveMediaLocalServiceImpl implements SaveMediaService {
+public class SaveMediaLocalImpl implements SaveMediaService {
 
     @Value("${directory.image-media.name}")
     private String directoryImageName;

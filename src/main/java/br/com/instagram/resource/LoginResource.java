@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,10 +31,15 @@ public class LoginResource {
     public Mono<ResponseEntity<TokenDTO>> userLogin(@RequestBody UserRequest userRequest){
 
         try {
-            Mono<Authentication> authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()));
-            String token = jwtTokenService.generateToken(authenticate, userRequest.getUsername());
 
-            return Mono.just(ResponseEntity.ok( new TokenDTO("Bearer ",token)));
+            return authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(userRequest.getUsername(), userRequest.getPassword()))
+                    .map(authentication -> {
+                        return jwtTokenService.generateToken(authentication);
+                    })
+                    .map(s -> {
+                        return ResponseEntity.ok( new TokenDTO("Bearer ",s));
+                    });
 
         }catch (Exception e){
             e.printStackTrace();
